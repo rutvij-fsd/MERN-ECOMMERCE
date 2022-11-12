@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
-
+const validator = require("validator");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please enter your Name"],
-    maxLength: [4, "Name should be at least 4 characters"],
+    minLength: [4, "Name should be at least 4 characters"],
   },
   email: {
     type: String,
     required: [true, "Please enter your Email"],
     unique: true,
-    validators: [validator.isEmail, "Please enter a valid email"],
+    validate: [validator.isEmail, "Please enter a valid email"],
   },
   password: {
     type: String,
@@ -30,10 +30,10 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: 'user',
+    default: "user",
   },
   resetPasswordToken: String,
-  resetPasswordTokenExpire:Date,
+  resetPasswordTokenExpire: Date,
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
