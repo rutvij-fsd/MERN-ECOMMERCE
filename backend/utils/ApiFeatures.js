@@ -26,11 +26,20 @@ class ApiFeatures {
     removeFields.forEach((key) => delete queryStrCopy[key]);
     
     // filter for price and rating
-    console.log(queryStrCopy);
     let queryStrCopy2 = JSON.stringify(queryStrCopy);
     queryStrCopy2 = queryStrCopy2.replace(/\b(gt|gte|lt|lte)\b/g,(key)=> `$${key}`); // replace between all 
-    console.log(queryStrCopy2);
     this.query = this.query.find(JSON.parse(queryStrCopy2));
+    return this;
+  }
+
+  // Pagination
+  pagination(resultPerPage){
+    const currentPage = Number(this.queryStr.page) || 1;
+
+    const skip = resultPerPage* (currentPage-1); // No of product to skip
+
+    this.query = this.query.limit(resultPerPage).skip(skip);
+
     return this;
   }
 }
