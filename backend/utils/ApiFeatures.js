@@ -21,14 +21,16 @@ class ApiFeatures {
   filter() {
     // copy queryStr from original we cannot directly assign object to const as it will pass only ref of object
     const queryStrCopy = { ...this.queryStr };
-    console.log(queryStrCopy);
     // remove some fields for catagory purposes
     const removeFields = ["keyword", "page", "limit"];
     removeFields.forEach((key) => delete queryStrCopy[key]);
     
+    // filter for price and rating
     console.log(queryStrCopy);
-
-    this.query = this.query.find(queryStrCopy);
+    let queryStrCopy2 = JSON.stringify(queryStrCopy);
+    queryStrCopy2 = queryStrCopy2.replace(/\b(gt|gte|lt|lte)\b/g,(key)=> `$${key}`); // replace between all 
+    console.log(queryStrCopy2);
+    this.query = this.query.find(JSON.parse(queryStrCopy2));
     return this;
   }
 }
