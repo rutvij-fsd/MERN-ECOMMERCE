@@ -5,14 +5,30 @@ class ApiFeatures {
   }
 
   search() {
-    const keyword = this.queryStr.keyword ? {
-        name: {
+    const keyword = this.queryStr.keyword
+      ? {
+          name: {
             $regex: this.queryStr.keyword,
-            $options: "i", // ignore case sesitive options when searching for keywords        
+            $options: "i", // ignore case sesitive options when searching for keywords
+          },
         }
-    } : {};
-    console.log(keyword),
-    this.query = this.query.find({...keyword});
+      : {};
+
+    this.query = this.query.find({ ...keyword });
+    return this;
+  }
+
+  filter() {
+    // copy queryStr from original we cannot directly assign object to const as it will pass only ref of object
+    const queryStrCopy = { ...this.queryStr };
+    console.log(queryStrCopy);
+    // remove some fields for catagory purposes
+    const removeFields = ["keyword", "page", "limit"];
+    removeFields.forEach((key) => delete queryStrCopy[key]);
+    
+    console.log(queryStrCopy);
+
+    this.query = this.query.find(queryStrCopy);
     return this;
   }
 }
